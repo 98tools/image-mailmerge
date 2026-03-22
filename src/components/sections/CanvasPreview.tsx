@@ -83,20 +83,17 @@ export const CanvasPreview: React.FC<CanvasPreviewProps> = ({
                 [scrollbar-width:none] [-ms-overflow-style:none]"
             >
               <div className="flex items-center justify-center min-h-full min-w-full p-4">
-                <div 
+                <canvas
+                  ref={canvasRef}
+                  onMouseDown={onMouseDown}
+                  onMouseMove={onMouseMove}
+                  onMouseUp={onMouseUp}
                   style={{
-                    transform: `scale(${zoomLevel})`,
-                    transformOrigin: 'center center'
+                    width: canvasRef.current ? `${canvasRef.current.width * zoomLevel}px` : undefined,
+                    height: canvasRef.current ? `${canvasRef.current.height * zoomLevel}px` : undefined,
                   }}
-                >
-                  <canvas
-                    ref={canvasRef}
-                    onMouseDown={onMouseDown}
-                    onMouseMove={onMouseMove}
-                    onMouseUp={onMouseUp}
-                    className="cursor-crosshair rounded-lg shadow-lg max-w-none"
-                  />
-                </div>
+                  className="cursor-crosshair rounded-lg shadow-lg max-w-none block"
+                />
               </div>
             </div>
           ) : (

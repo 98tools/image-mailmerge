@@ -9,34 +9,45 @@ export const createZoomControls = (
   const zoomIn = () => setZoomLevel(prev => Math.min(prev * 1.2, 5));
   const zoomOut = () => setZoomLevel(prev => Math.max(prev / 1.2, 0.1));
   const zoomToActual = () => setZoomLevel(1);
-  
-  const zoomToFit = () => {
-    if (!canvasRef.current || !originalImageWidthRef.current || !originalImageHeightRef.current) return;
-    
+
+  const centerCanvasInContainer = (scale: number) => {
     const container = canvasContainerRef.current;
     if (!container) return;
-    
-    // Get the actual available space for the image
+
+    const targetLeft = Math.max((container.scrollWidth - container.clientWidth) / 2, 0);
+    const targetTop = Math.max((container.scrollHeight - container.clientHeight) / 2, 0);
+
+    container.scrollLeft = targetLeft;
+    container.scrollTop = targetTop;
+  };
+
+  const calculateFitScale = () => {
+    if (!canvasRef.current || !originalImageWidthRef.current || !originalImageHeightRef.current) {
+      return 1;
+    }
+
+    const container = canvasContainerRef.current;
+    if (!container) return 1;
+
     const containerRect = container.getBoundingClientRect();
-    const availableWidth = containerRect.width - 128; // Account for padding (64px on each side)
-    const availableHeight = containerRect.height - 128; // Account for padding (64px on each side)
-    
-    // Calculate scale factors for both dimensions
+    const padding = 32;
+    const availableWidth = Math.max(containerRect.width - padding, 1);
+    const availableHeight = Math.max(containerRect.height - padding, 1);
+
     const scaleX = availableWidth / originalImageWidthRef.current;
     const scaleY = availableHeight / originalImageHeightRef.current;
-    
-    // Use the smaller scale to ensure the image fits completely
-    const scale = Math.min(scaleX, scaleY, 1); // Don't zoom in beyond 100%
-    
-    console.log('Zoom to fit:', { 
-      containerSize: { width: containerRect.width, height: containerRect.height },
-      availableSpace: { width: availableWidth, height: availableHeight },
-      imageSize: { width: originalImageWidthRef.current, height: originalImageHeightRef.current },
-      scales: { scaleX, scaleY },
-      finalScale: scale 
-    });
-    
-    setZoomLevel(scale);
+    return Math.min(scaleX, scaleY, 1);
+  };
+  
+  const zoomToFit = () => {
+    const applyFit = () => {
+      const scale = calculateFitScale();
+      setZoomLevel(scale);
+      requestAnimationFrame(() => centerCanvasInContainer(scale));
+    };
+
+    applyFit();
+    requestAnimationFrame(applyFit);
   };
   
   return {

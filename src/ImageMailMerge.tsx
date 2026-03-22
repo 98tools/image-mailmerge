@@ -86,7 +86,9 @@ const ImageMailMerge: React.FC = () => {
           canvas.setIsImageLoading(false);
           
           requestAnimationFrame(() => {
-            zoomToFit();
+            requestAnimationFrame(() => {
+              zoomToFit();
+            });
           });
           
           bindCanvasEvents();
