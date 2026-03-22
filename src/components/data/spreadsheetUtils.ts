@@ -1,6 +1,17 @@
 import Papa from 'papaparse';
 import * as XLSX from 'xlsx';
 
+const normalizeCellValue = (value: unknown): string => {
+  if (value === null || value === undefined) return '';
+  if (typeof value === 'string') return value;
+  return String(value);
+};
+
+const normalizeHeaderValue = (header: unknown, index: number): string => {
+  const normalized = normalizeCellValue(header).trim();
+  return normalized || `Column ${index + 1}`;
+};
+
 // CSV row interface
 export interface CSVRow {
   [key: string]: string;
@@ -25,8 +36,18 @@ export const parseSpreadsheetFile = async (file: File): Promise<SpreadsheetParse
         Papa.parse(file, {
           header: true,
           complete: (results) => {
-            const data = results.data as CSVRow[];
-            const headers = results.meta.fields || [];
+            const rawData = results.data as Record<string, unknown>[];
+            const headers = (results.meta.fields || []).map((field, index) =>
+              normalizeHeaderValue(field, index)
+            );
+
+            const data = rawData.map((row) => {
+              const normalizedRow: CSVRow = {};
+              headers.forEach((header) => {
+                normalizedRow[header] = normalizeCellValue(row[header]);
+              });
+              return normalizedRow;
+            });
             resolve({ data, headers });
           },
           error: (error) => {
@@ -57,14 +78,16 @@ export const parseSpreadsheetFile = async (file: File): Promise<SpreadsheetParse
             }
             
             // First row contains headers
-            const headers = jsonData[0];
+            const headers = jsonData[0].map((header, index) =>
+              normalizeHeaderValue(header, index)
+            );
             const rows = jsonData.slice(1);
             
             // Convert to CSVRow format
             const parsedData: CSVRow[] = rows.map(row => {
               const rowObject: CSVRow = {};
               headers.forEach((header, index) => {
-                rowObject[header] = row[index] || '';
+                rowObject[header] = normalizeCellValue(row[index]);
               });
               return rowObject;
             });

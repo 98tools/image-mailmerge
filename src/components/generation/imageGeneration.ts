@@ -124,7 +124,7 @@ export const generateFileName = (
   let fileName = `image_${String(index + 1).padStart(4, '0')}.png`;
   
   if (fileNameMapping.csvColumn && row[fileNameMapping.csvColumn]) {
-    const customName = row[fileNameMapping.csvColumn].trim();
+    const customName = String(row[fileNameMapping.csvColumn] ?? '').trim();
     if (customName) {
       // Sanitize filename and ensure .png extension
       let sanitizedName = customName.replace(/[<>:"/\\|?*]/g, '_');

@@ -31,7 +31,7 @@ export const useSpreadsheetData = (fields: Field[]) => {
       console.log('Data rows:', result.data.length);
       
       const filteredData = result.data.filter(row => {
-        return Object.values(row).some(value => value && value.trim() !== '');
+        return Object.values(row).some(value => String(value ?? '').trim() !== '');
       });
       
       setCsvData(filteredData);

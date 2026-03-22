@@ -154,8 +154,8 @@ export const getFieldDisplayText = (
   const mapping = fieldMappings.find(m => m.fieldName === field.name);
   if (!mapping?.csvColumn) return field.demoText;
   
-  const csvValue = rowData[mapping.csvColumn];
-  return csvValue && csvValue.trim() ? csvValue : field.demoText;
+  const csvValue = String(rowData[mapping.csvColumn] ?? '');
+  return csvValue.trim() ? csvValue : field.demoText;
 };
 
 // Field mapping utilities
