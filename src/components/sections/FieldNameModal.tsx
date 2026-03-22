@@ -25,7 +25,7 @@ export const FieldNameModal: React.FC<FieldNameModalProps> = ({
         <h3 className="text-lg font-semibold text-gray-900 mb-2">Enter field name</h3>
         {fieldType && (
           <p className="text-sm text-gray-600 mb-4">
-            Creating a {fieldType === 'text' ? 'Text Field' : 'QR Code Field'}
+            Creating a <span className="font-bold">{fieldType === 'text' ? 'Text Field' : 'QR Code Field'}</span>
           </p>
         )}
 
