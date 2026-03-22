@@ -5,6 +5,7 @@
     "dev": "vite",
     "build": "vite build",
     "build:microfrontend": "vite build --config vite.microfrontend.config.ts",
+    "build:all": "npm run build && npm run build:microfrontend",
     "preview": "npm run build && vite preview",
     "deploy": "npx wrangler deploy"
   },

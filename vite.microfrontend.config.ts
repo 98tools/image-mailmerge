@@ -5,6 +5,8 @@ import { resolve } from 'node:path'
 export default defineConfig({
   plugins: [react()],
   build: {
+    outDir: 'dist',
+    emptyOutDir: false,
     lib: {
       entry: resolve(__dirname, 'src/microfrontend.tsx'),
       formats: ['es'],
