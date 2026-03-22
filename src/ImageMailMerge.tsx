@@ -736,18 +736,18 @@ const ImageMailMerge: React.FC = () => {
           onZoomToFit={zoomToFit}
           onZoomToActual={zoomToActual}
         />
-      </div>
 
-      {/* Field Type Selection Modal */}
-      <FieldTypeModal
-        isOpen={ui.showFieldTypeModal}
-        onTextFieldSelect={() => handleFieldTypeSelection('text')}
-        onQRCodeFieldSelect={() => handleFieldTypeSelection('qrcode')}
-        onCancel={() => {
-          ui.setShowFieldTypeModal(false);
-          ui.setPendingFieldPosition(null);
-        }}
-      />
+        {/* Field Type Selection Modal */}
+        <FieldTypeModal
+          isOpen={ui.showFieldTypeModal}
+          onTextFieldSelect={() => handleFieldTypeSelection('text')}
+          onQRCodeFieldSelect={() => handleFieldTypeSelection('qrcode')}
+          onCancel={() => {
+            ui.setShowFieldTypeModal(false);
+            ui.setPendingFieldPosition(null);
+          }}
+        />
+      </div>
     </>
   );
 };
