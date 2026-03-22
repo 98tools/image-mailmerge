@@ -46,13 +46,13 @@ export const FieldMappingSection: React.FC<FieldMappingSectionProps> = ({
             </svg>
             <span className="text-sm font-medium text-indigo-700">Custom File Names</span>
           </div>
-          <div className="flex items-center space-x-2 mb-3">
-            <span className="text-sm text-gray-700 min-w-[80px]">file_name:</span>
+          <div className="flex items-center space-x-2 mb-3 min-w-0">
+            <span className="text-sm text-gray-700 min-w-[80px] shrink-0">file_name:</span>
             <div className="flex-1 min-w-0">
               <select
                 value={fileNameMapping.csvColumn || ''}
                 onChange={(e) => onFileNameMappingChange(e.target.value)}
-                className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full min-w-0 max-w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">-- Use Default (image_0001.png) --</option>
                 {csvHeaders.map(header => (
@@ -85,18 +85,20 @@ export const FieldMappingSection: React.FC<FieldMappingSectionProps> = ({
 
         {/* Field Mappings */}
         {fieldMappings.map((mapping, index) => (
-          <div key={index} className="flex items-center space-x-2">
-            <span className="text-sm text-gray-700 min-w-[80px]">{mapping.fieldName}:</span>
-            <select
-              value={mapping.csvColumn || ''}
-              onChange={(e) => onFieldMappingChange(mapping.fieldName, e.target.value)}
-              className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm flex-1 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-            >
-              <option value="">-- Select Column --</option>
-              {csvHeaders.map(header => (
-                <option key={header} value={header}>{header}</option>
-              ))}
-            </select>
+          <div key={index} className="flex items-center space-x-2 min-w-0">
+            <span className="text-sm text-gray-700 min-w-[80px] shrink-0 truncate" title={mapping.fieldName}>{mapping.fieldName}:</span>
+            <div className="flex-1 min-w-0">
+              <select
+                value={mapping.csvColumn || ''}
+                onChange={(e) => onFieldMappingChange(mapping.fieldName, e.target.value)}
+                className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full min-w-0 max-w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              >
+                <option value="">-- Select Column --</option>
+                {csvHeaders.map(header => (
+                  <option key={header} value={header}>{header}</option>
+                ))}
+              </select>
+            </div>
           </div>
         ))}
       </div>
