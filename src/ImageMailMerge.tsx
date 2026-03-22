@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { QRCodeFieldData, QRCodeFieldEditor, drawQRCodeOnCanvas } from './components/QRCodeField';
 import { parseMarkdownText, applyTextFormatting, drawFormattedText } from './components/text/textFormatting';
 import { COLOR_PRESETS, TEXT_ALIGN_OPTIONS } from './components/ui/constants';
@@ -29,9 +29,14 @@ import { useCanvasState, useFontManagement, useFieldState, useSpreadsheetData, u
 import { Sidebar } from './components/sections/Sidebar';
 import { CanvasPreview } from './components/sections/CanvasPreview';
 import { FieldTypeModal } from './components/sections/FieldTypeModal';
+import { FieldNameModal } from './components/sections/FieldNameModal';
 import { SuccessNotification } from './components/sections/SuccessNotification';
 
 const ImageMailMerge: React.FC = () => {
+  const [showFieldNameModal, setShowFieldNameModal] = useState(false);
+  const [pendingFieldType, setPendingFieldType] = useState<'text' | 'qrcode' | null>(null);
+  const [newFieldName, setNewFieldName] = useState('');
+
   // Canvas state
   const canvas = useCanvasState();
   
@@ -138,27 +143,39 @@ const ImageMailMerge: React.FC = () => {
   // Handle field type selection
   const handleFieldTypeSelection = useCallback((fieldType: 'text' | 'qrcode') => {
     if (!ui.pendingFieldPosition) return;
-    
-    const fieldName = prompt('Enter field name:');
-    if (!fieldName) {
-      ui.setShowFieldTypeModal(false);
-      ui.setPendingFieldPosition(null);
-      return;
-    }
 
-    if (fieldType === 'text') {
-      const field = createTextField(fieldName, ui.pendingFieldPosition.x, ui.pendingFieldPosition.y);
+    ui.setShowFieldTypeModal(false);
+    setPendingFieldType(fieldType);
+    setNewFieldName('');
+    setShowFieldNameModal(true);
+  }, [ui.pendingFieldPosition]);
+
+  const handleCreateField = useCallback(() => {
+    if (!ui.pendingFieldPosition || !pendingFieldType) return;
+
+    const trimmedName = newFieldName.trim();
+    if (!trimmedName) return;
+
+    if (pendingFieldType === 'text') {
+      const field = createTextField(trimmedName, ui.pendingFieldPosition.x, ui.pendingFieldPosition.y);
       addFieldToList(field, fieldState.setFields, fieldState.setFieldMappings);
     } else {
-      const field = createQRField(fieldName, ui.pendingFieldPosition.x, ui.pendingFieldPosition.y);
+      const field = createQRField(trimmedName, ui.pendingFieldPosition.x, ui.pendingFieldPosition.y);
       addFieldToList(field, fieldState.setFields, fieldState.setFieldMappings);
     }
 
-    drawFields();
-    checkReadyToGenerate(canvas.templateImage, spreadsheet.csvData, fieldState.fields);
-    ui.setShowFieldTypeModal(false);
+    setShowFieldNameModal(false);
+    setPendingFieldType(null);
+    setNewFieldName('');
     ui.setPendingFieldPosition(null);
-  }, [ui.pendingFieldPosition]);
+  }, [ui.pendingFieldPosition, pendingFieldType, newFieldName]);
+
+  const handleCancelFieldName = useCallback(() => {
+    setShowFieldNameModal(false);
+    setPendingFieldType(null);
+    setNewFieldName('');
+    ui.setPendingFieldPosition(null);
+  }, []);
 
   // Draw fields
   const drawFields = useCallback(async () => {
@@ -744,8 +761,17 @@ const ImageMailMerge: React.FC = () => {
           onQRCodeFieldSelect={() => handleFieldTypeSelection('qrcode')}
           onCancel={() => {
             ui.setShowFieldTypeModal(false);
-            ui.setPendingFieldPosition(null);
+            handleCancelFieldName();
           }}
+        />
+
+        <FieldNameModal
+          isOpen={showFieldNameModal}
+          fieldName={newFieldName}
+          fieldType={pendingFieldType}
+          onFieldNameChange={setNewFieldName}
+          onConfirm={handleCreateField}
+          onCancel={handleCancelFieldName}
         />
       </div>
     </>
