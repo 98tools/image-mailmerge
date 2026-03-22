@@ -4,6 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "build:microfrontend": "vite build --config vite.microfrontend.config.ts",
     "preview": "npm run build && vite preview",
     "deploy": "npx wrangler deploy"
   },
