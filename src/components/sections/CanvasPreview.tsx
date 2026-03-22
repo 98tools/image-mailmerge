@@ -30,8 +30,8 @@ export const CanvasPreview: React.FC<CanvasPreviewProps> = ({
   onZoomToActual,
 }) => {
   return (
-    <div className="flex-1 bg-gray-50 overflow-hidden">
-      <div className="h-full flex flex-col">
+    <div className="flex-1 min-h-0 bg-gray-50 overflow-hidden">
+      <div className="h-full min-h-0 flex flex-col">
         {/* Preview Header */}
         <div className="bg-white border-b border-gray-200 px-6 py-3">
           <div className="flex items-center justify-between">
@@ -74,15 +74,15 @@ export const CanvasPreview: React.FC<CanvasPreviewProps> = ({
         </div>
         
         {/* Preview Content */}
-        <div className="flex-1 p-6 overflow-auto">
+        <div className="flex-1 min-h-0 p-6 overflow-hidden">
           {templateImage ? (
             <div 
               ref={canvasContainerRef}
               className="h-full w-full bg-white border border-gray-200 rounded-lg shadow-md
-                overflow-hidden [&::-webkit-scrollbar]:hidden
+                overflow-auto [&::-webkit-scrollbar]:hidden
                 [scrollbar-width:none] [-ms-overflow-style:none]"
             >
-              <div className="flex items-center justify-center min-h-full min-w-full p-8">
+              <div className="flex items-center justify-center min-h-full min-w-full p-4">
                 <div 
                   style={{
                     transform: `scale(${zoomLevel})`,

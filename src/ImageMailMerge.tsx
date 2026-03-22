@@ -653,7 +653,7 @@ const ImageMailMerge: React.FC = () => {
       />
 
       {/* Main Layout */}
-      <div ref={ui.mainLayoutRef} className="flex h-full bg-white">
+      <div ref={ui.mainLayoutRef} className="flex h-full min-h-0 bg-white">
         {/* Sidebar */}
         <Sidebar
           sidebarWidth={ui.sidebarWidth}
