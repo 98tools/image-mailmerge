@@ -96,10 +96,6 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
     onUpdate({ ...field, backgroundColor });
   };
 
-  const handleDemoTextChange = (demoText: string) => {
-    onUpdate({ ...field, demoText });
-  };
-
   return (
     <>
       {/* QR Code Size Control */}
@@ -167,6 +163,42 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
           </details>
         </div>
       </div>
+
+      <details className="mt-3">
+        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">Positioning</summary>
+        <div className="grid grid-cols-2 gap-2 mt-2">
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">X</label>
+            <input
+              type="number"
+              value={field.x}
+              onChange={(e) => {
+                const x = Number(e.target.value);
+                if (!Number.isNaN(x)) {
+                  onUpdate({ ...field, x });
+                }
+              }}
+              placeholder="X"
+              className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-gray-600 mb-1">Y</label>
+            <input
+              type="number"
+              value={field.y}
+              onChange={(e) => {
+                const y = Number(e.target.value);
+                if (!Number.isNaN(y)) {
+                  onUpdate({ ...field, y });
+                }
+              }}
+              placeholder="Y"
+              className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+        </div>
+      </details>
 
       {/* Background Options */}
       <div className="mt-3">
