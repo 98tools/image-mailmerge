@@ -162,6 +162,42 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
               placeholder="Demo text"
               className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full mb-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
+
+            <details className="mb-2">
+              <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">Positioning</summary>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <div>
+                  <label className="block text-xs text-gray-600 mb-1">X</label>
+                  <input
+                    type="number"
+                    value={field.x}
+                    onChange={(e) => {
+                      const x = Number(e.target.value);
+                      if (!Number.isNaN(x)) {
+                        onFieldUpdate(index, { ...field, x });
+                      }
+                    }}
+                    placeholder="X"
+                    className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-gray-600 mb-1">Y</label>
+                  <input
+                    type="number"
+                    value={field.y}
+                    onChange={(e) => {
+                      const y = Number(e.target.value);
+                      if (!Number.isNaN(y)) {
+                        onFieldUpdate(index, { ...field, y });
+                      }
+                    }}
+                    placeholder="Y"
+                    className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              </div>
+            </details>
             
             {field.type === 'text' ? (
               <>
