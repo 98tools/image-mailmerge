@@ -32,6 +32,54 @@ export interface QRCodeFieldProps {
   onUpdate: (field: QRCodeFieldData) => void;
 }
 
+const qrCanvasCache = new Map<string, HTMLCanvasElement>();
+
+const buildQRCacheKey = (
+  text: string,
+  options: {
+    size: number;
+    color: string;
+    backgroundColor: string | null;
+  }
+) => `${text}|${options.size}|${options.color}|${options.backgroundColor ?? 'transparent'}`;
+
+const getQRCodeCanvas = async (
+  text: string,
+  options: {
+    size: number;
+    color: string;
+    backgroundColor: string | null;
+  }
+): Promise<HTMLCanvasElement> => {
+  const safeText = text || 'Empty';
+  const cacheKey = buildQRCacheKey(safeText, options);
+  const cachedCanvas = qrCanvasCache.get(cacheKey);
+  if (cachedCanvas) {
+    return cachedCanvas;
+  }
+
+  const qrCanvas = document.createElement('canvas');
+  await QRCode.toCanvas(qrCanvas, safeText, {
+    width: options.size,
+    margin: 1,
+    errorCorrectionLevel: 'M',
+    color: {
+      dark: options.color,
+      light: options.backgroundColor || '#00000000',
+    }
+  });
+
+  if (qrCanvasCache.size >= 200) {
+    const oldestKey = qrCanvasCache.keys().next().value;
+    if (oldestKey) {
+      qrCanvasCache.delete(oldestKey);
+    }
+  }
+
+  qrCanvasCache.set(cacheKey, qrCanvas);
+  return qrCanvas;
+};
+
 export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
   field,
   onUpdate
@@ -184,19 +232,8 @@ export const generateQRCodeDataURL = async (
   }
 ): Promise<string> => {
   try {
-    const qrOptions: any = {
-      width: options.size,
-      height: options.size,
-      color: {
-        dark: options.color,
-        light: options.backgroundColor || '#00000000', // transparent if no background
-      },
-      margin: 1,
-      errorCorrectionLevel: 'M'
-    };
-
-    const dataURL = await QRCode.toDataURL(text || 'Empty', qrOptions) as unknown as string;
-    return dataURL;
+    const qrCanvas = await getQRCodeCanvas(text, options);
+    return qrCanvas.toDataURL('image/png');
   } catch (error) {
     console.error('Error generating QR code:', error);
     // Return a simple fallback
@@ -211,30 +248,12 @@ export const drawQRCodeOnCanvas = async (
   text: string
 ): Promise<void> => {
   try {
-    const dataURL = await generateQRCodeDataURL(text, {
+    const qrCanvas = await getQRCodeCanvas(text, {
       size: field.size,
       color: field.color,
       backgroundColor: field.backgroundColor
     });
-
-    return new Promise((resolve) => {
-      const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, field.x, field.y, field.size, field.size);
-        resolve();
-      };
-      img.onerror = () => {
-        // Draw error placeholder
-        ctx.fillStyle = '#f0f0f0';
-        ctx.fillRect(field.x, field.y, field.size, field.size);
-        ctx.fillStyle = '#666';
-        ctx.font = '12px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText('QR Error', field.x + field.size / 2, field.y + field.size / 2);
-        resolve();
-      };
-      img.src = dataURL;
-    });
+    ctx.drawImage(qrCanvas, field.x, field.y, field.size, field.size);
   } catch (error) {
     console.error('Error drawing QR code:', error);
     // Draw error placeholder
