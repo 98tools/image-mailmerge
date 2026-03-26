@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Field, FieldMapping } from '../components/types/fieldTypes';
 
 export const useFieldState = () => {
@@ -8,7 +8,7 @@ export const useFieldState = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
 
-  const dragStartRef = { x: 0, y: 0, fieldX: 0, fieldY: 0, fontSize: 0 };
+  const dragStartRef = useRef({ x: 0, y: 0, fieldX: 0, fieldY: 0, fontSize: 0 });
 
   const handleRemoveField = useCallback((index: number) => {
     setFields(prev => prev.filter((_, i) => i !== index));

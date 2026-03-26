@@ -372,19 +372,19 @@ const ImageMailMerge: React.FC = () => {
       
       if (hit.isResizeHandle) {
         fieldState.setIsResizing(true);
-        fieldState.dragStartRef.x = coords.x;
-        fieldState.dragStartRef.y = coords.y;
-        fieldState.dragStartRef.fieldX = field.x;
-        fieldState.dragStartRef.fieldY = field.y;
-        fieldState.dragStartRef.fontSize = field.type === 'text' ? field.fontSize : field.size;
+        fieldState.dragStartRef.current.x = coords.x;
+        fieldState.dragStartRef.current.y = coords.y;
+        fieldState.dragStartRef.current.fieldX = field.x;
+        fieldState.dragStartRef.current.fieldY = field.y;
+        fieldState.dragStartRef.current.fontSize = field.type === 'text' ? field.fontSize : field.size;
         canvas.canvasRef.current.style.cursor = 'nw-resize';
       } else {
         fieldState.setIsDragging(true);
-        fieldState.dragStartRef.x = coords.x;
-        fieldState.dragStartRef.y = coords.y;
-        fieldState.dragStartRef.fieldX = field.x;
-        fieldState.dragStartRef.fieldY = field.y;
-        fieldState.dragStartRef.fontSize = field.type === 'text' ? field.fontSize : field.size;
+        fieldState.dragStartRef.current.x = coords.x;
+        fieldState.dragStartRef.current.y = coords.y;
+        fieldState.dragStartRef.current.fieldX = field.x;
+        fieldState.dragStartRef.current.fieldY = field.y;
+        fieldState.dragStartRef.current.fontSize = field.type === 'text' ? field.fontSize : field.size;
         canvas.canvasRef.current.style.cursor = 'move';
       }
     } else {
@@ -402,16 +402,16 @@ const ImageMailMerge: React.FC = () => {
     
     if (fieldState.isDragging && fieldState.selectedFieldIndex >= 0) {
       const field = fieldState.fields[fieldState.selectedFieldIndex];
-      const newX = fieldState.dragStartRef.fieldX + (coords.x - fieldState.dragStartRef.x);
-      const newY = fieldState.dragStartRef.fieldY + (coords.y - fieldState.dragStartRef.y);
+      const newX = fieldState.dragStartRef.current.fieldX + (coords.x - fieldState.dragStartRef.current.x);
+      const newY = fieldState.dragStartRef.current.fieldY + (coords.y - fieldState.dragStartRef.current.y);
       
       fieldState.setFields(prev => prev.map((f, i) => 
         i === fieldState.selectedFieldIndex ? { ...f, x: newX, y: newY } : f
       ));
     } else if (fieldState.isResizing && fieldState.selectedFieldIndex >= 0) {
       const field = fieldState.fields[fieldState.selectedFieldIndex];
-      const deltaY = coords.y - fieldState.dragStartRef.y;
-      const newFontSize = Math.max(8, Math.min(72, fieldState.dragStartRef.fontSize + deltaY * 0.5));
+      const deltaY = coords.y - fieldState.dragStartRef.current.y;
+      const newFontSize = Math.max(8, Math.min(72, fieldState.dragStartRef.current.fontSize + deltaY * 0.5));
       
       fieldState.setFields(prev => prev.map((f, i) => 
         i === fieldState.selectedFieldIndex ? { ...f, fontSize: newFontSize } : f
