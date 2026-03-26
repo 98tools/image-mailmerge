@@ -133,20 +133,24 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
                 {field.type === 'text' ? 'Text' : 'QR'}
               </span>
               <button
+                type="button"
                 onClick={() => onFieldSelect(index)}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-1.5 rounded transition-colors flex-shrink-0"
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded transition-colors flex-shrink-0 inline-flex items-center justify-center"
+                style={{ width: '1.75rem', height: '1.75rem', minWidth: '1.75rem', minHeight: '1.75rem', lineHeight: 0 }}
                 title="Select Field"
               >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 flex-shrink-0" style={{ width: '0.75rem', height: '0.75rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"></path>
                 </svg>
               </button>
               <button
+                type="button"
                 onClick={() => onFieldRemove(index)}
-                className="bg-red-600 hover:bg-red-700 text-white p-1.5 rounded transition-colors flex-shrink-0"
+                className="bg-red-600 hover:bg-red-700 text-white rounded transition-colors flex-shrink-0 inline-flex items-center justify-center"
+                style={{ width: '1.75rem', height: '1.75rem', minWidth: '1.75rem', minHeight: '1.75rem', lineHeight: 0 }}
                 title="Delete Field"
               >
-                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3 h-3 flex-shrink-0" style={{ width: '0.75rem', height: '0.75rem' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
               </button>
