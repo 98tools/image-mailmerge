@@ -101,44 +101,47 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
   return (
     <>
       {/* QR Code Size Control */}
-      <div className="grid grid-cols-2 gap-2 mb-2">
-        <div>
-          <label className="block text-gray-700 text-xs font-medium mb-1">
-            QR Size: {field.size}px
-          </label>
-          <input
-            type="range"
-            min="20"
-            max="200"
-            value={field.size}
-            onChange={(e) => handleSizeChange(Number(e.target.value))}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer 
-              [&::-webkit-slider-track]:bg-gray-300 [&::-webkit-slider-track]:h-2 [&::-webkit-slider-track]:rounded-md
-              [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-blue-700 [&::-webkit-slider-thumb]:shadow-md
-              [&::-webkit-slider-thumb:hover]:bg-blue-600
-              [&::-moz-range-track]:bg-gray-300 [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-md [&::-moz-range-track]:border-0
-              [&::-moz-range-thumb]:bg-blue-500 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-blue-700 [&::-moz-range-thumb]:shadow-md
-              [&::-moz-range-thumb:hover]:bg-blue-600"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-700 text-xs font-medium mb-1">
-            Size Value
-          </label>
-          <input
-            type="number"
-            value={field.size}
-            onChange={(e) => handleSizeChange(parseInt(e.target.value) || 50)}
-            min="20"
-            max="200"
-            placeholder="QR Size"
-            className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-          />
+      <div className="border border-gray-200 rounded-lg p-3 mb-3 bg-gray-50">
+        <label className="block text-gray-700 text-xs font-medium mb-2">QR Code Size</label>
+        <div className="grid grid-cols-2 gap-2 mb-2">
+          <div>
+            <label className="block text-gray-700 text-xs font-medium mb-1">
+              QR Size: {field.size}px
+            </label>
+            <input
+              type="range"
+              min="20"
+              max="200"
+              value={field.size}
+              onChange={(e) => handleSizeChange(Number(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer 
+                [&::-webkit-slider-track]:bg-gray-300 [&::-webkit-slider-track]:h-2 [&::-webkit-slider-track]:rounded-md
+                [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:bg-blue-500 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-blue-700 [&::-webkit-slider-thumb]:shadow-md
+                [&::-webkit-slider-thumb:hover]:bg-blue-600
+                [&::-moz-range-track]:bg-gray-300 [&::-moz-range-track]:h-2 [&::-moz-range-track]:rounded-md [&::-moz-range-track]:border-0
+                [&::-moz-range-thumb]:bg-blue-500 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-blue-700 [&::-moz-range-thumb]:shadow-md
+                [&::-moz-range-thumb:hover]:bg-blue-600"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 text-xs font-medium mb-1">
+              Size Value
+            </label>
+            <input
+              type="number"
+              value={field.size}
+              onChange={(e) => handleSizeChange(parseInt(e.target.value) || 50)}
+              min="20"
+              max="200"
+              placeholder="QR Size"
+              className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
         </div>
       </div>
 
       {/* QR Code Color Controls */}
-      <div>
+      <div className="border border-gray-200 rounded-lg p-3 mb-3 bg-gray-50">
         <label className="block text-gray-700 text-xs font-medium mb-2">QR Code Color</label>
         <div className="space-y-2">
           <div className="flex flex-wrap gap-1">
@@ -166,8 +169,8 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
         </div>
       </div>
 
-      <details className="mt-3">
-        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">Positioning</summary>
+      <details className="border border-gray-200 rounded-lg p-3 mb-3 bg-gray-50">
+        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 font-medium">Positioning</summary>
         <div className="mt-2 mb-2">
           <label className="flex items-center text-xs text-gray-600 cursor-pointer">
             <input
@@ -216,7 +219,7 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
       </details>
 
       {/* Background Options */}
-      <div className="mt-3">
+      <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
         <label className="block text-gray-700 text-xs font-medium mb-2">Background</label>
         <div className="flex gap-2 mb-2">
           <label className="flex items-center text-gray-700 text-sm flex-1">

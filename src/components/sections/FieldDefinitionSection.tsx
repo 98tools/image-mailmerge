@@ -167,78 +167,81 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
             
             {field.type === 'text' ? (
               <>
-                {/* Text Field Controls */}
-                <div className="grid grid-cols-2 gap-2 mb-2">
-                  <input
-                    type="number"
-                    value={field.fontSize}
-                    onChange={(e) => onFieldFontSizeChange(index, parseInt(e.target.value))}
-                    placeholder="Font Size"
-                    className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                  {/* Font Dropdown */}
-                  <div className="relative">
-                    <button
-                      type="button"
-                      onClick={() => onToggleFontDropdown(index)}
-                      className="font-dropdown-trigger w-full bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm text-left flex items-center justify-between hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      disabled={isFontsLoading}
-                    >
-                      <span className="truncate">
-                        {isFontsLoading ? 'Loading fonts...' : 
-                         (availableFonts.find(font => font.value === field.fontFamily)?.name || 'Arial')}
-                      </span>
-                      <svg className="w-4 h-4 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
-                      </svg>
-                    </button>
-                    
-                    {showFontDropdown === index && (
-                      <div className="font-dropdown absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-hidden">
-                        {/* Search Input */}
-                        <div className="p-2 border-b border-gray-200">
-                          <input
-                            type="text"
-                            value={fontSearchTerm}
-                            onChange={(e) => onFontSearchChange(e.target.value)}
-                            placeholder="Search fonts..."
-                            className="w-full bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                            autoFocus
-                          />
+                {/* Text Size & Font Section */}
+                <div className="border border-gray-200 rounded-lg p-3 mb-3 bg-gray-50">
+                  <label className="block text-gray-700 text-xs font-medium mb-2">Size & Font</label>
+                  <div className="grid grid-cols-2 gap-2 mb-2">
+                    <input
+                      type="number"
+                      value={field.fontSize}
+                      onChange={(e) => onFieldFontSizeChange(index, parseInt(e.target.value))}
+                      placeholder="Font Size"
+                      className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    />
+                    {/* Font Dropdown */}
+                    <div className="relative">
+                      <button
+                        type="button"
+                        onClick={() => onToggleFontDropdown(index)}
+                        className="font-dropdown-trigger w-full bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm text-left flex items-center justify-between hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        disabled={isFontsLoading}
+                      >
+                        <span className="truncate">
+                          {isFontsLoading ? 'Loading fonts...' : 
+                           (availableFonts.find(font => font.value === field.fontFamily)?.name || 'Arial')}
+                        </span>
+                        <svg className="w-4 h-4 ml-1 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                      </button>
+                      
+                      {showFontDropdown === index && (
+                        <div className="font-dropdown absolute z-50 top-full left-0 right-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-hidden">
+                          {/* Search Input */}
+                          <div className="p-2 border-b border-gray-200">
+                            <input
+                              type="text"
+                              value={fontSearchTerm}
+                              onChange={(e) => onFontSearchChange(e.target.value)}
+                              placeholder="Search fonts..."
+                              className="w-full bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                              autoFocus
+                            />
+                          </div>
+                          
+                          {/* Font List */}
+                          <div className="overflow-y-auto max-h-48">
+                            {filteredFonts.length > 0 ? (
+                              filteredFonts.map(font => (
+                                <button
+                                  key={font.value}
+                                  type="button"
+                                  onClick={() => {
+                                    onFieldFontChange(index, font.value);
+                                    onCloseFontDropdown();
+                                  }}
+                                  className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 transition-colors ${
+                                    field.fontFamily === font.value ? 'bg-blue-600 text-white' : 'text-gray-700'
+                                  }`}
+                                  style={{ fontFamily: font.value }}
+                                >
+                                  {font.name}
+                                </button>
+                              ))
+                            ) : (
+                              <div className="px-3 py-2 text-sm text-gray-500">
+                                No fonts found
+                              </div>
+                            )}
+                          </div>
                         </div>
-                        
-                        {/* Font List */}
-                        <div className="overflow-y-auto max-h-48">
-                          {filteredFonts.length > 0 ? (
-                            filteredFonts.map(font => (
-                              <button
-                                key={font.value}
-                                type="button"
-                                onClick={() => {
-                                  onFieldFontChange(index, font.value);
-                                  onCloseFontDropdown();
-                                }}
-                                className={`w-full text-left px-3 py-2 text-sm hover:bg-gray-100 transition-colors ${
-                                  field.fontFamily === font.value ? 'bg-blue-600 text-white' : 'text-gray-700'
-                                }`}
-                                style={{ fontFamily: font.value }}
-                              >
-                                {font.name}
-                              </button>
-                            ))
-                          ) : (
-                            <div className="px-3 py-2 text-sm text-gray-500">
-                              No fonts found
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
                 
                 {/* Text Color Controls */}
-                <div>
+                <div className="border border-gray-200 rounded-lg p-3 mb-3 bg-gray-50">
                   <label className="block text-gray-700 text-xs font-medium mb-2">Text Color</label>
                   <div className="space-y-2">
                     <div className="flex flex-wrap gap-1">
@@ -264,8 +267,8 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
                   </div>
                 </div>
 
-                <details className="mt-3 mb-2">
-                  <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">Positioning</summary>
+                <details className="border border-gray-200 rounded-lg p-3 mb-3 bg-gray-50">
+                  <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 font-medium">Positioning</summary>
                   <div className="mt-2 mb-2">
                     <label className="flex items-center text-xs text-gray-600 cursor-pointer">
                       <input
@@ -313,7 +316,7 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
                 </details>
 
                 {/* Text Alignment Controls */}
-                <div className="mt-3">
+                <div className="border border-gray-200 rounded-lg p-3 bg-gray-50">
                   <label className="block text-gray-700 text-xs font-medium mb-2">Text Alignment</label>
                   <div className="flex gap-2">
                     {TEXT_ALIGN_OPTIONS.map(option => (
