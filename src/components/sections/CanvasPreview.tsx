@@ -78,9 +78,20 @@ export const CanvasPreview: React.FC<CanvasPreviewProps> = ({
           {templateImage ? (
             <div 
               ref={canvasContainerRef}
-              className="h-full w-full bg-white border border-gray-200 rounded-lg shadow-md
+              className="h-full w-full border border-gray-200 rounded-lg shadow-md
                 overflow-auto [&::-webkit-scrollbar]:hidden
                 [scrollbar-width:none] [-ms-overflow-style:none]"
+              style={{
+                backgroundColor: '#f8fafc',
+                backgroundImage: `
+                  linear-gradient(45deg, rgba(15, 23, 42, 0.035) 25%, transparent 25%),
+                  linear-gradient(-45deg, rgba(15, 23, 42, 0.035) 25%, transparent 25%),
+                  linear-gradient(45deg, transparent 75%, rgba(15, 23, 42, 0.035) 75%),
+                  linear-gradient(-45deg, transparent 75%, rgba(15, 23, 42, 0.035) 75%)
+                `,
+                backgroundSize: '18px 18px',
+                backgroundPosition: '0 0, 0 9px, 9px -9px, -9px 0px',
+              }}
             >
               <div className="flex items-start justify-start min-h-full min-w-full p-4">
                 <canvas
