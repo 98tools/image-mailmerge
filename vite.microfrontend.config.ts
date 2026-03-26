@@ -1,19 +1,31 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import { resolve } from 'node:path'
+import federation from '@originjs/vite-plugin-federation'
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    federation({
+      name: 'imageMailMerge',
+      filename: 'remoteEntry.js',
+      exposes: {
+        './ImageMailMerge': './src/microfrontend.tsx',
+      },
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: '^19.1.0',
+        },
+        'react-dom': {
+          singleton: true,
+          requiredVersion: '^19.1.0',
+        },
+      },
+    }),
+  ],
   build: {
     outDir: 'dist',
     emptyOutDir: false,
-    lib: {
-      entry: resolve(__dirname, 'src/microfrontend.tsx'),
-      formats: ['es'],
-      fileName: 'image-mailmerge-mf',
-    },
-    rollupOptions: {
-      external: ['react', 'react-dom'],
-    },
+    target: 'esnext',
   },
 })
