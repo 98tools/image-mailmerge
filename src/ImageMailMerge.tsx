@@ -457,12 +457,12 @@ const ImageMailMerge: React.FC = () => {
       const delta = e.deltaY > 0 ? -2 : 2;
       
       if (field.type === 'text') {
-        const newFontSize = Math.max(8, Math.min(72, field.fontSize + delta));
+        const newFontSize = field.fontSize + delta;
         fieldState.setFields(prev => prev.map((f, i) => 
           i === hit.index ? { ...f, fontSize: newFontSize } : f
         ));
       } else if (field.type === 'qrcode') {
-        const newSize = Math.max(20, Math.min(200, field.size + delta));
+        const newSize = field.size + delta;
         fieldState.setFields(prev => prev.map((f, i) => 
           i === hit.index ? { ...f, size: newSize } : f
         ));
