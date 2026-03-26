@@ -27,7 +27,13 @@ export const FieldMappingSection: React.FC<FieldMappingSectionProps> = ({
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300">
       <div className="flex items-center mb-4">
-        <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm mr-3"
+          style={{
+            background: 'linear-gradient(90deg, #a855f7 0%, #6366f1 100%)',
+            color: '#ffffff'
+          }}
+        >
           4
         </div>
         <h3 className="text-lg font-semibold text-gray-900">Field Mapping</h3>

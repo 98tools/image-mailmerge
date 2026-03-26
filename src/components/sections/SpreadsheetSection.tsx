@@ -28,7 +28,13 @@ export const SpreadsheetSection: React.FC<SpreadsheetSectionProps> = ({
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-6 hover:shadow-lg transition-all duration-300">
       <div className="flex items-center mb-4">
-        <div className="w-8 h-8 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+        <div
+          className="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm mr-3"
+          style={{
+            background: 'linear-gradient(90deg, #f97316 0%, #ef4444 100%)',
+            color: '#ffffff'
+          }}
+        >
           3
         </div>
         <h3 className="text-lg font-semibold text-gray-900">Spreadsheet Data</h3>
