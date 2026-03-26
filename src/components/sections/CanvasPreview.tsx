@@ -93,7 +93,7 @@ export const CanvasPreview: React.FC<CanvasPreviewProps> = ({
                 backgroundPosition: '0 0, 0 9px, 9px -9px, -9px 0px',
               }}
             >
-              <div className="flex items-start justify-start min-h-full min-w-full p-4">
+              <div className="min-h-full min-w-full p-4">
                 <canvas
                   ref={canvasRef}
                   onMouseDown={onMouseDown}
@@ -103,7 +103,7 @@ export const CanvasPreview: React.FC<CanvasPreviewProps> = ({
                     width: canvasRef.current ? `${canvasRef.current.width * zoomLevel}px` : undefined,
                     height: canvasRef.current ? `${canvasRef.current.height * zoomLevel}px` : undefined,
                   }}
-                  className="cursor-crosshair rounded-lg shadow-lg max-w-none block"
+                  className="cursor-crosshair rounded-lg shadow-lg max-w-none block mx-auto"
                 />
               </div>
             </div>
