@@ -9,7 +9,7 @@ export default function Header() {
             <span className="text-sm text-gray-600">for image</span>
             {/* GitHub Link */}
             <a 
-                href="https://github.com/98tools/image-mailmerge-cloudflare" 
+                href="https://github.com/98tools/image-mailmerge" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="flex items-center space-x-2 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors duration-200 group border border-gray-300"
