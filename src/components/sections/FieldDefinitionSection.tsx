@@ -55,6 +55,8 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
   onCloseFontDropdown,
   onFieldUpdate,
 }) => {
+  const [showDecimals, setShowDecimals] = React.useState(false);
+
   if (!showFieldDefinition) return null;
 
   const COLOR_PRESETS = [
@@ -263,13 +265,26 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
                 </div>
 
                 <details className="mt-3 mb-2">
-                  <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">Positioning</summary>
-                  <div className="grid grid-cols-2 gap-2 mt-2">
+                  <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 flex items-center justify-between">
+                    <span>Positioning</span>
+                  </summary>
+                  <div className="mt-2 mb-2">
+                    <label className="flex items-center text-xs text-gray-600 cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={showDecimals}
+                        onChange={(e) => setShowDecimals(e.target.checked)}
+                        className="w-3 h-3 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-2"
+                      />
+                      Show decimals
+                    </label>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="block text-xs text-gray-600 mb-1">X</label>
                       <input
                         type="number"
-                        value={Math.round(field.x)}
+                        value={showDecimals ? field.x : Math.round(field.x)}
                         onChange={(e) => {
                           const x = Number(e.target.value);
                           if (!Number.isNaN(x)) {
@@ -284,7 +299,7 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
                       <label className="block text-xs text-gray-600 mb-1">Y</label>
                       <input
                         type="number"
-                        value={Math.round(field.y)}
+                        value={showDecimals ? field.y : Math.round(field.y)}
                         onChange={(e) => {
                           const y = Number(e.target.value);
                           if (!Number.isNaN(y)) {
