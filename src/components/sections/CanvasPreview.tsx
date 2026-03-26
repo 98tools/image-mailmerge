@@ -82,7 +82,7 @@ export const CanvasPreview: React.FC<CanvasPreviewProps> = ({
                 overflow-auto [&::-webkit-scrollbar]:hidden
                 [scrollbar-width:none] [-ms-overflow-style:none]"
             >
-              <div className="flex items-center justify-center min-h-full min-w-full p-4">
+              <div className="flex items-start justify-start min-h-full min-w-full p-4">
                 <canvas
                   ref={canvasRef}
                   onMouseDown={onMouseDown}
