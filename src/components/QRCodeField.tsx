@@ -171,7 +171,7 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
             <label className="block text-xs text-gray-600 mb-1">X</label>
             <input
               type="number"
-              value={field.x}
+              value={Math.round(field.x)}
               onChange={(e) => {
                 const x = Number(e.target.value);
                 if (!Number.isNaN(x)) {
@@ -179,6 +179,7 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
                 }
               }}
               placeholder="X"
+              step="any"
               className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
@@ -186,7 +187,7 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
             <label className="block text-xs text-gray-600 mb-1">Y</label>
             <input
               type="number"
-              value={field.y}
+              value={Math.round(field.y)}
               onChange={(e) => {
                 const y = Number(e.target.value);
                 if (!Number.isNaN(y)) {
@@ -194,6 +195,7 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
                 }
               }}
               placeholder="Y"
+              step="any"
               className="bg-white border border-gray-300 text-gray-900 px-2 py-1 rounded text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
