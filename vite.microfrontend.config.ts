@@ -9,7 +9,7 @@ export default defineConfig({
       name: 'imageMailMerge',
       filename: 'remoteEntry.js',
       exposes: {
-        './ImageMailMerge': './src/microfrontend.tsx',
+        './ImageMailMerge': './src/ImageMailMerge.tsx'
       },
       shared: {
         react: {
