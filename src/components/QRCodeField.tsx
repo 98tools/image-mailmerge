@@ -167,9 +167,7 @@ export const QRCodeFieldEditor: React.FC<QRCodeFieldProps> = ({
       </div>
 
       <details className="mt-3">
-        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 flex items-center justify-between">
-          <span>Positioning</span>
-        </summary>
+        <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">Positioning</summary>
         <div className="mt-2 mb-2">
           <label className="flex items-center text-xs text-gray-600 cursor-pointer">
             <input

@@ -265,9 +265,7 @@ export const FieldDefinitionSection: React.FC<FieldDefinitionSectionProps> = ({
                 </div>
 
                 <details className="mt-3 mb-2">
-                  <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800 flex items-center justify-between">
-                    <span>Positioning</span>
-                  </summary>
+                  <summary className="text-xs text-gray-600 cursor-pointer hover:text-gray-800">Positioning</summary>
                   <div className="mt-2 mb-2">
                     <label className="flex items-center text-xs text-gray-600 cursor-pointer">
                       <input
