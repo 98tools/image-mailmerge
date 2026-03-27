@@ -1,4 +1,4 @@
-name: (main) [fe+mf] Deploy to Cloudflare Workers
+name: (dev) [fe+mf] Deploy to Cloudflare Workers
 
 on:
   push:
