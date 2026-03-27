@@ -53,8 +53,6 @@ function isOriginAllowed(origin: string, allowedOrigins: string[]): boolean {
 }
 
 function getServerConfig(env: Record<string, string>): import('vite').ServerOptions | undefined {
-  const isDev = env.VITE_NODE_ENV === 'dev';
-  
   // Parse allowed origins from environment variable
   const allowedOriginsStr = env.ALLOWED_ORIGINS || '';
   const allowedOrigins = allowedOriginsStr
@@ -85,15 +83,5 @@ function getServerConfig(env: Record<string, string>): import('vite').ServerOpti
     }],
   };
 
-  if (isDev) {
-    return {
-      ...serverConfig,
-      https: {
-        key: fs.readFileSync('./localhost-key.pem'),
-        cert: fs.readFileSync('./localhost.pem')
-      },
-    };
-  }
-  
   return serverConfig;
 }
