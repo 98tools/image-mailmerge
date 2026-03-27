@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import { api } from 'feMain/api';
 import { QRCodeFieldData, QRCodeFieldEditor, drawQRCodeOnCanvas } from './components/QRCodeField';
 import { parseMarkdownText, applyTextFormatting, drawFormattedText } from './components/text/textFormatting';
 import { COLOR_PRESETS, TEXT_ALIGN_OPTIONS } from './components/ui/constants';
@@ -646,6 +647,16 @@ const ImageMailMerge: React.FC = () => {
       );
 
       if (result.success) {
+        // Consume points: 1 point per generated image
+        const imageCount = spreadsheet.csvData.length;
+        try {
+          await api.basicToolPointConsumption('image-mailmerge', imageCount);
+          console.log(`Consumed ${imageCount} points for generating ${imageCount} images`);
+        } catch (pointError) {
+          console.error('Error consuming points:', pointError);
+          // Don't fail the entire operation if point consumption fails
+        }
+
         ui.setShowSuccessMessage(true);
         setTimeout(() => ui.setShowSuccessMessage(false), 5000);
       } else {
