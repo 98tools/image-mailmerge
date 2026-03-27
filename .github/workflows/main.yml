@@ -27,6 +27,8 @@ jobs:
         run: npm install -g wrangler
 
       - name: Build frontend + microfrontend
+        env:
+          VITE_FE_MAIN_MF: ${{ vars.VITE_FE_MAIN_MF }}
         run: npm run build
 
       - name: Deploy worker
