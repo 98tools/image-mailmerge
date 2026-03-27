@@ -18,12 +18,10 @@ export default defineConfig(({ mode }) => {
         },
         shared: {
           react: {
-            singleton: true,
-            requiredVersion: '^19.1.0',
+            version: '19.1.0',
           },
           'react-dom': {
-            singleton: true,
-            requiredVersion: '^19.1.0',
+            version: '19.1.0',
           },
         },
       }),
