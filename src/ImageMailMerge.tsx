@@ -34,10 +34,50 @@ import { SuccessNotification } from './components/sections/SuccessNotification';
 
 const isDemoMode = import.meta.env.VITE_NODE_ENV === 'demo';
 
+type DecrementCreditsFn = (amount: number) => void;
+
+interface FeMainCreditsBridgeProps {
+  onReady: (fn: DecrementCreditsFn) => void;
+}
+
+const EmptyCreditsBridge: React.FC<FeMainCreditsBridgeProps> = () => null;
+
+const FeMainCreditsBridge = isDemoMode
+  ? null
+  : React.lazy<React.ComponentType<FeMainCreditsBridgeProps>>(async () => {
+      const creditsModule = await import('feMain/credits');
+      const useCreditsHook =
+        (creditsModule as any).useCredits ||
+        (creditsModule as any).default?.useCredits;
+
+      if (!useCreditsHook) {
+        return { default: EmptyCreditsBridge };
+      }
+
+      const Bridge: React.FC<FeMainCreditsBridgeProps> = ({ onReady }) => {
+        const creditsContext = useCreditsHook();
+
+        useEffect(() => {
+          if (creditsContext?.decrementCredits) {
+            onReady(creditsContext.decrementCredits);
+          }
+        }, [creditsContext?.decrementCredits, onReady]);
+
+        return null;
+      };
+
+      return { default: Bridge };
+    });
+
 const ImageMailMerge: React.FC = () => {
   const [showFieldNameModal, setShowFieldNameModal] = useState(false);
   const [pendingFieldType, setPendingFieldType] = useState<'text' | 'qrcode' | null>(null);
   const [newFieldName, setNewFieldName] = useState('');
+  const [decrementCredits, setDecrementCredits] = useState<DecrementCreditsFn | null>(null);
+
+  const handleCreditsBridgeReady = useCallback((decrementFn: DecrementCreditsFn) => {
+    setDecrementCredits(() => decrementFn);
+  }, []);
 
   // Canvas state
   const canvas = useCanvasState();
@@ -673,6 +713,7 @@ const ImageMailMerge: React.FC = () => {
 
       if (result.success) {
         if (!isDemoMode) {
+          decrementCredits?.(imageCount);
           console.log(`Consumed ${imageCount} points for generating ${imageCount} images`);
         }
 
@@ -689,12 +730,18 @@ const ImageMailMerge: React.FC = () => {
       ui.setProgress(0);
       ui.setProgressText('');
     }
-  }, [canvas.templateImage, spreadsheet.csvData, fieldState.fields, fieldState.fieldMappings, spreadsheet.fileNameMapping, canvas.imageUrl, ui]);
+  }, [canvas.templateImage, spreadsheet.csvData, fieldState.fields, fieldState.fieldMappings, spreadsheet.fileNameMapping, canvas.imageUrl, ui, decrementCredits]);
 
   const isReadyToGenerate = checkReadyToGenerate(canvas.templateImage, spreadsheet.csvData, fieldState.fields);
 
   return (
     <>
+      {!isDemoMode && FeMainCreditsBridge && (
+        <React.Suspense fallback={null}>
+          <FeMainCreditsBridge onReady={handleCreditsBridgeReady} />
+        </React.Suspense>
+      )}
+
       {/* Success Notification */}
       <SuccessNotification
         show={ui.showSuccessMessage}
