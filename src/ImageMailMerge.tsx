@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { api } from 'feMain/api';
-import { useOptionalCredits } from 'feMain/credits';
+import { useCredits } from 'feMain/credits';
 import { QRCodeFieldData, QRCodeFieldEditor, drawQRCodeOnCanvas } from './components/QRCodeField';
 import { parseMarkdownText, applyTextFormatting, drawFormattedText } from './components/text/textFormatting';
 import { COLOR_PRESETS, TEXT_ALIGN_OPTIONS } from './components/ui/constants';
@@ -35,7 +35,7 @@ import { FieldNameModal } from './components/sections/FieldNameModal';
 import { SuccessNotification } from './components/sections/SuccessNotification';
 
 const ImageMailMerge: React.FC = () => {
-  const creditsContext = useOptionalCredits();
+  const { decrementCredits } = useCredits();
   const [showFieldNameModal, setShowFieldNameModal] = useState(false);
   const [pendingFieldType, setPendingFieldType] = useState<'text' | 'qrcode' | null>(null);
   const [newFieldName, setNewFieldName] = useState('');
@@ -653,7 +653,7 @@ const ImageMailMerge: React.FC = () => {
         const imageCount = spreadsheet.csvData.length;
         try {
           await api.basicToolPointConsumption('image-mailmerge', imageCount);
-          creditsContext?.decrementCredits(imageCount);
+          decrementCredits(imageCount);
           console.log(`Consumed ${imageCount} points for generating ${imageCount} images`);
         } catch (pointError) {
           console.error('Error consuming points:', pointError);
@@ -673,7 +673,7 @@ const ImageMailMerge: React.FC = () => {
       ui.setProgress(0);
       ui.setProgressText('');
     }
-  }, [canvas.templateImage, spreadsheet.csvData, fieldState.fields, fieldState.fieldMappings, spreadsheet.fileNameMapping, canvas.imageUrl, ui, creditsContext]);
+  }, [canvas.templateImage, spreadsheet.csvData, fieldState.fields, fieldState.fieldMappings, spreadsheet.fileNameMapping, canvas.imageUrl, ui, decrementCredits]);
 
   const isReadyToGenerate = checkReadyToGenerate(canvas.templateImage, spreadsheet.csvData, fieldState.fields);
 

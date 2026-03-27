@@ -21,5 +21,5 @@ declare module 'feMain/credits' {
     decrementCredits: (amount: number) => void;
   }
 
-  export function useOptionalCredits(): CreditsContextType | undefined;
+  export function useCredits(): CreditsContextType;
 }
