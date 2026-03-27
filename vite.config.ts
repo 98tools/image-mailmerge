@@ -1,10 +1,37 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
+import federation from '@originjs/vite-plugin-federation'
 
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    port: 3005,
-    open: true
-  }
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd(), '');
+  return {
+    plugins: [
+      react(),
+      federation({
+        name: 'imageMailMerge',
+        filename: 'remoteEntry.js',
+        exposes: {
+          './ImageMailMerge': './src/ImageMailMerge.tsx'
+        },
+        remotes: {
+          feMain: env.VITE_FE_MAIN_MF ? `${env.VITE_FE_MAIN_MF}/assets/remoteEntry.js` : 'http://localhost:5173/assets/remoteEntry.js'
+        },
+        shared: {
+          react: {
+            singleton: true,
+            requiredVersion: '^19.1.0',
+          },
+          'react-dom': {
+            singleton: true,
+            requiredVersion: '^19.1.0',
+          },
+        },
+      }),
+    ],
+    build: {
+      outDir: 'dist',
+      emptyOutDir: false,
+      target: 'esnext',
+    },
+  };
 })
