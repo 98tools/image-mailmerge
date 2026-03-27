@@ -27,7 +27,7 @@ jobs:
         run: npm install -g wrangler
 
       - name: Build frontend + microfrontend
-        run: npm run build:all
+        run: npm run build
 
       - name: Deploy worker
         run: npx wrangler deploy --name image-mailmerge
