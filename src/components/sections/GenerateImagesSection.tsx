@@ -5,6 +5,7 @@ interface GenerateImagesSectionProps {
   isProcessing: boolean;
   progress: number;
   progressText: string;
+  showPointsIndicator: boolean;
   csvDataLength: number | undefined;
   templateImage: File | null;
   fieldsLength: number;
@@ -18,6 +19,7 @@ export const GenerateImagesSection: React.FC<GenerateImagesSectionProps> = ({
   isProcessing,
   progress,
   progressText,
+  showPointsIndicator,
   csvDataLength,
   templateImage,
   fieldsLength,
@@ -74,7 +76,7 @@ export const GenerateImagesSection: React.FC<GenerateImagesSectionProps> = ({
       </button>
 
       {/* Points Indicator */}
-      {csvDataLength !== undefined && csvDataLength > 0 && (
+      {showPointsIndicator && csvDataLength !== undefined && csvDataLength > 0 && (
         <div className="mt-2 flex items-center text-xs text-amber-700">
           <svg className="w-3 h-3 text-amber-600 mr-1" fill="currentColor" viewBox="0 0 20 20">
             <path d="M9.109 6.333c-1.505 0-2.742 1.237-2.742 2.742s1.237 2.742 2.742 2.742c1.505 0 2.742-1.237 2.742-2.742s-1.237-2.742-2.742-2.742zM10 16.25c-3.452 0-6.25-2.798-6.25-6.25S6.548 3.75 10 3.75s6.25 2.798 6.25 6.25-2.798 6.25-6.25 6.25z"></path>

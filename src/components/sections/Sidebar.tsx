@@ -23,6 +23,7 @@ interface SidebarProps {
   isProcessing: boolean;
   progress: number;
   progressText: string;
+  showPointsIndicator: boolean;
   showZoomControls: boolean;
   
   // Font management
@@ -79,6 +80,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   isProcessing,
   progress,
   progressText,
+  showPointsIndicator,
   showZoomControls,
   isFontsLoading,
   fontsLoaded,
@@ -213,6 +215,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           isProcessing={isProcessing}
           progress={progress}
           progressText={progressText}
+          showPointsIndicator={showPointsIndicator}
           csvDataLength={csvData?.length}
           templateImage={templateImage}
           fieldsLength={fields.length}

@@ -1,3 +1,12 @@
+interface ImportMetaEnv {
+  readonly VITE_NODE_ENV?: string;
+  readonly VITE_FE_MAIN_MF?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 declare module 'feMain/api' {
   export const api: {
     basicToolPointConsumption: (toolName: string, numOfPoints?: number, forceBackendValidation?: boolean) => Promise<{ success: boolean; message?: string; error?: string }>;

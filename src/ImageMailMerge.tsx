@@ -1,6 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { api } from 'feMain/api';
-import { useCredits } from 'feMain/credits';
 import { QRCodeFieldData, QRCodeFieldEditor, drawQRCodeOnCanvas } from './components/QRCodeField';
 import { parseMarkdownText, applyTextFormatting, drawFormattedText } from './components/text/textFormatting';
 import { COLOR_PRESETS, TEXT_ALIGN_OPTIONS } from './components/ui/constants';
@@ -34,8 +32,9 @@ import { FieldTypeModal } from './components/sections/FieldTypeModal';
 import { FieldNameModal } from './components/sections/FieldNameModal';
 import { SuccessNotification } from './components/sections/SuccessNotification';
 
+const isDemoMode = import.meta.env.VITE_NODE_ENV === 'demo';
+
 const ImageMailMerge: React.FC = () => {
-  const { decrementCredits } = useCredits();
   const [showFieldNameModal, setShowFieldNameModal] = useState(false);
   const [pendingFieldType, setPendingFieldType] = useState<'text' | 'qrcode' | null>(null);
   const [newFieldName, setNewFieldName] = useState('');
@@ -629,22 +628,26 @@ const ImageMailMerge: React.FC = () => {
   const generateImages = useCallback(async () => {
     if (!canvas.templateImage || !spreadsheet.csvData || !fieldState.fields.length) return;
 
+    const imageCount = spreadsheet.csvData.length;
     ui.setIsProcessing(true);
     ui.setProgress(0);
-    ui.setProgressText('Checking points...');
+    ui.setProgressText(isDemoMode ? 'Starting image generation...' : 'Checking points...');
     ui.setShowSuccessMessage(false);
 
     try {
-      // Consume points first and require backend confirmation.
-      // If this fails (e.g. insufficient points), generation and zip download are blocked.
-      const imageCount = spreadsheet.csvData.length;
-      const consumeResponse = await api.basicToolPointConsumption('image-mailmerge', imageCount, true);
+      if (!isDemoMode) {
+        // Load FE-main API only when needed so demo mode has no FE-main dependency.
+        const { api } = await import('feMain/api');
 
-      if (!consumeResponse.success) {
-        throw new Error(consumeResponse.error || consumeResponse.message || 'Failed to consume points');
+        // Consume points first and require backend confirmation.
+        // If this fails (e.g. insufficient points), generation and zip download are blocked.
+        const consumeResponse = await api.basicToolPointConsumption('image-mailmerge', imageCount, true);
+
+        if (!consumeResponse.success) {
+          throw new Error(consumeResponse.error || consumeResponse.message || 'Failed to consume points');
+        }
       }
 
-      decrementCredits(imageCount);
       ui.setProgressText('Starting image generation...');
 
       const result = await generateImagesUtil(
@@ -661,7 +664,9 @@ const ImageMailMerge: React.FC = () => {
       );
 
       if (result.success) {
-        console.log(`Consumed ${imageCount} points for generating ${imageCount} images`);
+        if (!isDemoMode) {
+          console.log(`Consumed ${imageCount} points for generating ${imageCount} images`);
+        }
 
         ui.setShowSuccessMessage(true);
         setTimeout(() => ui.setShowSuccessMessage(false), 5000);
@@ -676,7 +681,7 @@ const ImageMailMerge: React.FC = () => {
       ui.setProgress(0);
       ui.setProgressText('');
     }
-  }, [canvas.templateImage, spreadsheet.csvData, fieldState.fields, fieldState.fieldMappings, spreadsheet.fileNameMapping, canvas.imageUrl, ui, decrementCredits]);
+  }, [canvas.templateImage, spreadsheet.csvData, fieldState.fields, fieldState.fieldMappings, spreadsheet.fileNameMapping, canvas.imageUrl, ui]);
 
   const isReadyToGenerate = checkReadyToGenerate(canvas.templateImage, spreadsheet.csvData, fieldState.fields);
 
@@ -707,6 +712,7 @@ const ImageMailMerge: React.FC = () => {
           isProcessing={ui.isProcessing}
           progress={ui.progress}
           progressText={ui.progressText}
+          showPointsIndicator={!isDemoMode}
           showZoomControls={canvas.showZoomControls}
           isFontsLoading={fonts.isFontsLoading}
           fontsLoaded={fonts.fontsLoaded}
