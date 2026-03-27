@@ -31,5 +31,69 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: false,
       target: 'esnext',
     },
+    server: getServerConfig(env),
   };
 })
+
+function isOriginAllowed(origin: string, allowedOrigins: string[]): boolean {
+  return allowedOrigins.some(allowedOrigin => {
+    if (allowedOrigin.includes('*')) {
+      // Convert wildcard pattern to regex
+      // e.g., 'https://*.98.tools' -> /^https:\/\/.*\.98\.tools$/
+      const pattern = allowedOrigin
+        .replace(/\./g, '\\.')
+        .replace(/\*/g, '[a-zA-Z0-9-]*');
+      const regex = new RegExp(`^${pattern}$`);
+      return regex.test(origin);
+    } else {
+      // Exact match
+      return origin === allowedOrigin;
+    }
+  });
+}
+
+function getServerConfig(env: Record<string, string>): import('vite').ServerOptions | undefined {
+  const isDev = env.VITE_NODE_ENV === 'dev';
+  
+  // Parse allowed origins from environment variable
+  const allowedOriginsStr = env.ALLOWED_ORIGINS || '';
+  const allowedOrigins = allowedOriginsStr
+    .split(',')
+    .map(origin => origin.trim())
+    .filter(origin => origin.length > 0);
+
+  const serverConfig: import('vite').ServerOptions = {
+    host: true,
+    port: 5173,
+    middleware: [(req, res, next) => {
+      const origin = req.headers.origin || '';
+      
+      // Check if origin is allowed
+      if (allowedOrigins.length > 0 && isOriginAllowed(origin, allowedOrigins)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+        res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
+        res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
+      }
+      
+      if (req.method === 'OPTIONS') {
+        res.writeHead(200);
+        res.end();
+      } else {
+        next();
+      }
+    }],
+  };
+
+  if (isDev) {
+    return {
+      ...serverConfig,
+      https: {
+        key: fs.readFileSync('./localhost-key.pem'),
+        cert: fs.readFileSync('./localhost.pem')
+      },
+    };
+  }
+  
+  return serverConfig;
+}
