@@ -637,11 +637,19 @@ const ImageMailMerge: React.FC = () => {
     try {
       if (!isDemoMode) {
         // Load FE-main API only when needed so demo mode has no FE-main dependency.
-        const { api } = await import('feMain/api');
+        const apiModule = await import('feMain/api');
+        const apiClient =
+          (apiModule as any).api ||
+          (apiModule as any).default?.api ||
+          (apiModule as any).default;
+
+        if (!apiClient?.basicToolPointConsumption) {
+          throw new Error('FE-main API is unavailable in non-demo mode');
+        }
 
         // Consume points first and require backend confirmation.
         // If this fails (e.g. insufficient points), generation and zip download are blocked.
-        const consumeResponse = await api.basicToolPointConsumption('image-mailmerge', imageCount, true);
+        const consumeResponse = await apiClient.basicToolPointConsumption('image-mailmerge', imageCount, true);
 
         if (!consumeResponse.success) {
           throw new Error(consumeResponse.error || consumeResponse.message || 'Failed to consume points');
