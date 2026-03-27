@@ -1,4 +1,4 @@
-name: (main) [fe+mf] Deploy to Cloudflare Workers
+name: (dev) [fe+mf] Deploy to Cloudflare Workers
 
 on:
   push:
@@ -30,6 +30,7 @@ jobs:
         env:
           VITE_FE_MAIN_MF: ${{ vars.VITE_FE_MAIN_MF }}
           VITE_NODE_ENV: ${{ vars.VITE_NODE_ENV }}
+          VITE_ALLOWED_ORIGINS: ${{ vars.VITE_ALLOWED_ORIGINS }}
         run: npm run build
 
       - name: Deploy worker
