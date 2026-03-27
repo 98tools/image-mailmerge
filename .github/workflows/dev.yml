@@ -30,7 +30,7 @@ jobs:
         env:
           VITE_FE_MAIN_MF: ${{ vars.VITE_FE_MAIN_MF }}
           VITE_NODE_ENV: ${{ vars.VITE_NODE_ENV }}
-          ALLOWED_ORIGINS: ${{ vars.ALLOWED_ORIGINS }}
+          VITE_ALLOWED_ORIGINS: ${{ vars.VITE_ALLOWED_ORIGINS }}
         run: npm run build
 
       - name: Deploy worker

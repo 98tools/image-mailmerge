@@ -54,7 +54,7 @@ function isOriginAllowed(origin: string, allowedOrigins: string[]): boolean {
 
 function getServerConfig(env: Record<string, string>): import('vite').ServerOptions | undefined {
   // Parse allowed origins from environment variable
-  const allowedOriginsStr = env.ALLOWED_ORIGINS || '';
+  const allowedOriginsStr = env.VITE_ALLOWED_ORIGINS || '';
   const allowedOrigins = allowedOriginsStr
     .split(',')
     .map(origin => origin.trim())
