@@ -1,6 +1,6 @@
 declare module 'feMain/api' {
   export const api: {
-    basicToolPointConsumption: (toolName: string, numOfPoints?: number) => Promise<{ success: boolean; message?: string; error?: string }>;
+    basicToolPointConsumption: (toolName: string, numOfPoints?: number, forceBackendValidation?: boolean) => Promise<{ success: boolean; message?: string; error?: string }>;
   };
 }
 

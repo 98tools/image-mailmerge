@@ -631,10 +631,22 @@ const ImageMailMerge: React.FC = () => {
 
     ui.setIsProcessing(true);
     ui.setProgress(0);
-    ui.setProgressText('Starting image generation...');
+    ui.setProgressText('Checking points...');
     ui.setShowSuccessMessage(false);
 
     try {
+      // Consume points first and require backend confirmation.
+      // If this fails (e.g. insufficient points), generation and zip download are blocked.
+      const imageCount = spreadsheet.csvData.length;
+      const consumeResponse = await api.basicToolPointConsumption('image-mailmerge', imageCount, true);
+
+      if (!consumeResponse.success) {
+        throw new Error(consumeResponse.error || consumeResponse.message || 'Failed to consume points');
+      }
+
+      decrementCredits(imageCount);
+      ui.setProgressText('Starting image generation...');
+
       const result = await generateImagesUtil(
         canvas.templateImage,
         canvas.imageUrl,
@@ -649,16 +661,7 @@ const ImageMailMerge: React.FC = () => {
       );
 
       if (result.success) {
-        // Consume points: 1 point per generated image
-        const imageCount = spreadsheet.csvData.length;
-        try {
-          await api.basicToolPointConsumption('image-mailmerge', imageCount);
-          decrementCredits(imageCount);
-          console.log(`Consumed ${imageCount} points for generating ${imageCount} images`);
-        } catch (pointError) {
-          console.error('Error consuming points:', pointError);
-          // Don't fail the entire operation if point consumption fails
-        }
+        console.log(`Consumed ${imageCount} points for generating ${imageCount} images`);
 
         ui.setShowSuccessMessage(true);
         setTimeout(() => ui.setShowSuccessMessage(false), 5000);
