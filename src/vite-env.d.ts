@@ -3,3 +3,23 @@ declare module 'feMain/api' {
     basicToolPointConsumption: (toolName: string, numOfPoints?: number) => Promise<{ success: boolean; message?: string; error?: string }>;
   };
 }
+
+declare module 'feMain/credits' {
+  export interface CreditsContextType {
+    creditsData: {
+      current: number;
+      total: number;
+      plan: string;
+      status?: string;
+      billingCycle: string;
+      resetDate: string;
+      daysUntilReset: number;
+      nextAmount: number;
+      usagePercentage: number;
+    } | null;
+    setCreditsData: (data: any) => void;
+    decrementCredits: (amount: number) => void;
+  }
+
+  export function useOptionalCredits(): CreditsContextType | undefined;
+}
