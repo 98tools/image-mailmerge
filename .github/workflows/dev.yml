@@ -24,16 +24,15 @@ jobs:
         run: npm ci
 
       - name: Install Wrangler
-        run: npm install -g wrangler
+        run: npm install -g wrangler@4.51.0
 
       - name: Build frontend + microfrontend
         env:
           VITE_FE_MAIN_MF: ${{ vars.VITE_FE_MAIN_MF }}
           VITE_NODE_ENV: ${{ vars.VITE_NODE_ENV }}
-          VITE_ALLOWED_ORIGINS: ${{ vars.VITE_ALLOWED_ORIGINS }}
         run: npm run build
 
       - name: Deploy worker
-        run: npx wrangler deploy --name image-mailmerge
+        run: npx wrangler deploy --config wrangler.jsonc
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
