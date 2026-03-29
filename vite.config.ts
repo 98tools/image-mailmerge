@@ -4,7 +4,9 @@ import federation from '@originjs/vite-plugin-federation'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+
   return {
+    base: '/mf/image-mailmerge/',
     plugins: [
       react(),
       federation({
@@ -27,7 +29,7 @@ export default defineConfig(({ mode }) => {
       }),
     ],
     build: {
-      outDir: 'dist',
+      outDir: 'dist/mf/image-mailmerge',
       emptyOutDir: false,
       target: 'esnext',
     },
