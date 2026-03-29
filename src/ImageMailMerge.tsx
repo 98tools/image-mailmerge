@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { QRCodeFieldData, QRCodeFieldEditor, drawQRCodeOnCanvas } from './components/QRCodeField';
 import { parseMarkdownText, applyTextFormatting, drawFormattedText } from './components/text/textFormatting';
 import { COLOR_PRESETS, TEXT_ALIGN_OPTIONS } from './components/ui/constants';
+import { ErrorBoundary } from './components/ui/ErrorBoundary';
 import { 
   createTextField, 
   createQRField, 
@@ -737,9 +738,16 @@ const ImageMailMerge: React.FC = () => {
   return (
     <>
       {!isDemoMode && FeMainCreditsBridge && (
-        <React.Suspense fallback={null}>
-          <FeMainCreditsBridge onReady={handleCreditsBridgeReady} />
-        </React.Suspense>
+        <ErrorBoundary
+          fallback={null}
+          onError={(error) => {
+            console.warn('Credits bridge is unavailable. Continuing without credits integration.', error);
+          }}
+        >
+          <React.Suspense fallback={null}>
+            <FeMainCreditsBridge onReady={handleCreditsBridgeReady} />
+          </React.Suspense>
+        </ErrorBoundary>
       )}
 
       {/* Success Notification */}
