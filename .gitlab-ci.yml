@@ -3,3 +3,4 @@ stages:
 
 include:
   - local: .gitlab/dev.yml
+  - local: .gitlab/main.yml
