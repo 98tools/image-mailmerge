@@ -1,0 +1,19 @@
+deploy_frontend_dev:
+  stage: deploy
+  image: node:20
+  environment:
+    name: main
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
+  script:
+    - npm install
+    - npm install -g wrangler
+    - export CLOUDFLARE_API_TOKEN="$CLOUDFLARE_API_TOKEN_MAIN"
+    - export CLOUDFLARE_ACCOUNT_ID="$CLOUDFLARE_ACCOUNT_ID_MAIN"
+    - |
+      echo "VITE_FE_MAIN_MF=$FE_MAIN_URL_MAIN" > .env
+      echo "VITE_NODE_ENV=prod" >> .env
+
+      npm run build    
+    - wrangler deploy --name $THIS_APP_NAME
