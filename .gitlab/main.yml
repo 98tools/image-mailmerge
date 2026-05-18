@@ -1,4 +1,4 @@
-deploy_frontend_dev:
+deploy_frontend_main:
   stage: deploy
   image: node:20
   environment:
