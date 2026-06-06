@@ -4,6 +4,7 @@ import federation from '@originjs/vite-plugin-federation'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
+  const isHTTPS = process.env.npm_lifecycle_event === 'dev:https'
 
   return {
     base: '/mf/image-mailmerge/',
@@ -33,16 +34,20 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: false,
       target: 'esnext',
     },
-    server: getServerConfig(),
+    server: {
+      port: 9811,
+      watch: {
+        usePolling: true,
+        interval: 300,
+      },
+      ...(isHTTPS
+        ? {
+          https: {
+            key: './localhost-key.pem',
+            cert: './localhost.pem',
+          },
+        }
+        : {}),
+    },
   };
 })
-
-function getServerConfig(): import('vite').ServerOptions {
-  const serverConfig: import('vite').ServerOptions = {
-    host: true,
-    port: 5173,
-    cors: true,
-  };
-
-  return serverConfig;
-}
