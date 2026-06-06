@@ -33,6 +33,7 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       emptyOutDir: false,
+      assetsDir: assetDir,
       rollupOptions: {
         output: {
           // Avoid `[name]-[hash]` so lazy chunks and assets are not labeled by source path / component name.
