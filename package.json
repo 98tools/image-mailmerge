@@ -5,9 +5,10 @@
     "dev": "vite",
     "dev:https": "vite",
     "build": "tsc -b && vite build",
-    "build:watch": "concurrently -n BUILD,PREVIEW \"chokidar 'src/**/*' --initial --polling --poll-interval 300 -c 'vite build'\" \"vite preview --port 9811 --strictPort\"",
+    "build:watch": "concurrently -n BUILD,PREVIEW \"chokidar 'src/**/*' --initial --polling --poll-interval 300 -c 'vite build'\" \"vite preview --port 9841 --strictPort\"",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview --port 9841 --strictPort",
+    "deploy": "npx wrangler deploy"
   },
   "dependencies": {
     "@types/qrcode": "^1.5.5",

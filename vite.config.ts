@@ -45,7 +45,11 @@ export default defineConfig(({ mode }) => {
       target: 'esnext',
     },
     server: {
-      port: 9811,
+      host: true,
+      port: 9841,
+      strictPort: true,
+      cors: true,
+      allowedHosts: ['dev2.99.web.tr'],
       watch: {
         usePolling: true,
         interval: 300,
@@ -58,6 +62,9 @@ export default defineConfig(({ mode }) => {
           },
         }
         : {}),
+    },
+    preview: {
+      allowedHosts: ['dev2.99.web.tr'],
     },
   };
 })
