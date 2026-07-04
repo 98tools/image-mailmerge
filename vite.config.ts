@@ -34,14 +34,19 @@ export default defineConfig(({ mode }) => {
       target: 'esnext',
     },
     server: getServerConfig(),
+    preview: {
+      allowedHosts: ['dev2.99.web.tr'],
+    },
   };
 })
 
 function getServerConfig(): import('vite').ServerOptions {
   const serverConfig: import('vite').ServerOptions = {
     host: true,
-    port: 5173,
+    port: 9841,
+    strictPort: true,
     cors: true,
+    allowedHosts: ['dev2.99.web.tr'],
   };
 
   return serverConfig;
