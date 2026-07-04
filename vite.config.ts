@@ -49,7 +49,6 @@ export default defineConfig(({ mode }) => {
       port: 9841,
       strictPort: true,
       cors: true,
-      allowedHosts: ['dev2.99.web.tr'],
       watch: {
         usePolling: true,
         interval: 300,
@@ -62,7 +61,8 @@ export default defineConfig(({ mode }) => {
           },
         }
         : {}),
-    },
+      allowedHosts: ['dev2.99.web.tr'],
+      },
     preview: {
       allowedHosts: ['dev2.99.web.tr'],
     },
